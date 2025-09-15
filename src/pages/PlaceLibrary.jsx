@@ -7,28 +7,32 @@ export default function PlaceLibrary() {
   const [loading, setLoading] = useState(true);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
-  // Mock data for now - replace with API call
+  // Fetch real data from API
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setPlaces([
-        {
-          city: 'Paris',
-          profiles: [
-            { slug: 'ParisBudgetAdventure', budget: '$50-100/day', whoWith: 'solo', priorities: ['Culture & History'] },
-            { slug: 'ParisLuxuryRomantic', budget: '$800-1200/day', whoWith: 'spouse', priorities: ['Food & Dining'] },
-            { slug: 'ParisFamilyEducational', budget: '$200-350/day', whoWith: 'spouse-kids', priorities: ['Culture & History'] }
-          ]
-        },
-        {
-          city: 'Tokyo',
-          profiles: [
-            { slug: 'TokyoBudgetAdventure', budget: '$100-200/day', whoWith: 'solo', priorities: ['Adventure & Outdoor'] }
-          ]
+    const fetchPlaces = async () => {
+      try {
+        console.log('🔍 Fetching places from API...');
+        const response = await fetch('http://localhost:3000/tripwell/place-library');
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ Places fetched:', data);
+          setPlaces(data);
+        } else {
+          console.error('❌ Failed to fetch places:', response.status);
+          // Fallback to empty array if API fails
+          setPlaces([]);
         }
-      ]);
-      setLoading(false);
-    }, 1000);
+      } catch (error) {
+        console.error('❌ Error fetching places:', error);
+        // Fallback to empty array if API fails
+        setPlaces([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlaces();
   }, []);
 
   const handlePlaceClick = (place) => {
@@ -36,7 +40,7 @@ export default function PlaceLibrary() {
   };
 
   const handleProfileClick = (profile) => {
-    navigate(`/profile-detail/${profile.slug}`);
+    navigate(`/place-detail/${profile.slug}`);
   };
 
   if (loading) {

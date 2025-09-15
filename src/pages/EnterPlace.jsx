@@ -19,7 +19,14 @@ export default function EnterPlace() {
 
   // Options
   const seasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
-  const whoWithOptions = ['solo', 'spouse', 'friends', 'spouse-kids', 'other'];
+  const whoWithOptions = [
+    { value: 'solo', label: 'Solo Traveler' },
+    { value: 'spouse', label: 'Spouse / Partner' },
+    { value: 'spouse-kids', label: 'Spouse/Kids' },
+    { value: 'son-daughter', label: 'Son/Daughter' },
+    { value: 'friends', label: 'Friends' },
+    { value: 'other', label: 'Other' }
+  ];
   const priorityOptions = [
     'Culture & History', 'Food & Dining', 'Adventure & Outdoor',
     'Relaxation & Wellness', 'Shopping & Markets', 'Nightlife & Fun'
@@ -53,31 +60,70 @@ export default function EnterPlace() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    
     try {
       // Generate profile slug
       const profileSlug = `${formData.city}${formData.budget.replace(/[^a-zA-Z0-9]/g, '')}${formData.whoWith}`;
       
-      // Call the backend to generate profile
-      const response = await fetch('http://localhost:3000/tripwell/profile-gpt', {
+      console.log('🚀 Starting modular flow for:', profileSlug);
+      
+      // Step 1: Save place profile
+      console.log('📋 Step 1: Saving place profile...');
+      const profileResponse = await fetch('http://localhost:3000/tripwell/place-profile-save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          profileSlug,
+          placeSlug: profileSlug,
           inputVariables: formData
         })
       });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Profile generated:', result);
-        // Navigate to results or library
-        navigate('/place-library');
-      } else {
-        console.error('Failed to generate profile');
+      
+      if (!profileResponse.ok) {
+        throw new Error('Failed to save place profile');
       }
+      const profileResult = await profileResponse.json();
+      console.log('✅ Place profile saved:', profileResult.placeProfileId);
+      
+      // Step 2: Generate meta attractions
+      console.log('📋 Step 2: Generating meta attractions...');
+      const metaResponse = await fetch('http://localhost:3000/tripwell/meta-attractions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          placeSlug: profileSlug,
+          city: formData.city,
+          season: formData.season
+        })
+      });
+      
+      if (!metaResponse.ok) {
+        throw new Error('Failed to generate meta attractions');
+      }
+      const metaResult = await metaResponse.json();
+      console.log('✅ Meta attractions generated:', metaResult.metaAttractions.length);
+      
+      // Step 3: Build personalized list
+      console.log('🎯 Step 3: Building personalized list...');
+      const buildResponse = await fetch('http://localhost:3000/tripwell/build-list', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          placeSlug: profileSlug
+        })
+      });
+      
+      if (!buildResponse.ok) {
+        throw new Error('Failed to build personalized list');
+      }
+      const buildResult = await buildResponse.json();
+      console.log('✅ Personalized list built:', buildResult.contentGenerated);
+      
+      // Navigate directly to the new place detail
+      navigate(`/place-detail/${profileSlug}`);
+      
     } catch (error) {
-      console.error('Error:', error);
+      console.error('❌ Error in modular flow:', error);
+      alert('Failed to generate profile. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -144,7 +190,7 @@ export default function EnterPlace() {
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               {whoWithOptions.map(option => (
-                <option key={option} value={option}>{option}</option>
+                <option key={option.value} value={option.value}>{option.label}</option>
               ))}
             </select>
           </div>
