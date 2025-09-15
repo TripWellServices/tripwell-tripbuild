@@ -69,7 +69,7 @@ export default function EnterPlace() {
       
       // Step 1: Save place profile
       console.log('📋 Step 1: Saving place profile...');
-      const profileResponse = await fetch('http://localhost:3000/tripwell/place-profile-save', {
+      const profileResponse = await fetch('https://gofastbackend.onrender.com/tripwell/place-profile-save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -86,7 +86,7 @@ export default function EnterPlace() {
       
       // Step 2: Generate meta attractions
       console.log('📋 Step 2: Generating meta attractions...');
-      const metaResponse = await fetch('http://localhost:3000/tripwell/meta-attractions', {
+      const metaResponse = await fetch('https://gofastbackend.onrender.com/tripwell/meta-attractions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +104,7 @@ export default function EnterPlace() {
       
       // Step 3: Build personalized list
       console.log('🎯 Step 3: Building personalized list...');
-      const buildResponse = await fetch('http://localhost:3000/tripwell/build-list', {
+      const buildResponse = await fetch('https://gofastbackend.onrender.com/tripwell/build-list', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

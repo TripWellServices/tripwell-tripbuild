@@ -13,7 +13,7 @@ export default function PlaceDetail() {
     const fetchPlaceDetail = async () => {
       try {
         console.log('🔍 Fetching place detail:', placeSlug);
-        const response = await fetch(`http://localhost:3000/tripwell/place-detail/${placeSlug}`);
+        const response = await fetch(`https://gofastbackend.onrender.com/tripwell/place-detail/${placeSlug}`);
         
         if (response.ok) {
           const data = await response.json();

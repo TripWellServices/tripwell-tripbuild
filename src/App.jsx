@@ -5,6 +5,7 @@ import EnterPlace from './pages/EnterPlace';
 import PlaceLibrary from './pages/PlaceLibrary';
 import PlaceDetail from './pages/PlaceDetail';
 import GenerateTests from './pages/GenerateTests';
+import BuildMetaLayer from './pages/BuildMetaLayer';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/place-library" element={<PlaceLibrary />} />
           <Route path="/place-detail/:placeSlug" element={<PlaceDetail />} />
           <Route path="/generate-tests" element={<GenerateTests />} />
+          <Route path="/build-meta-layer" element={<BuildMetaLayer />} />
         </Routes>
       </div>
     </Router>

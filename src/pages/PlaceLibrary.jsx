@@ -12,7 +12,7 @@ export default function PlaceLibrary() {
     const fetchPlaces = async () => {
       try {
         console.log('🔍 Fetching places from API...');
-        const response = await fetch('http://localhost:3000/tripwell/place-library');
+        const response = await fetch('https://gofastbackend.onrender.com/tripwell/place-library');
         
         if (response.ok) {
           const data = await response.json();
@@ -58,7 +58,7 @@ export default function PlaceLibrary() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
-            📚 Place Library
+            🎯 Build Me Best Spots
           </h1>
           <p className="text-white/90 text-lg drop-shadow-md">
             Browse trip profiles by city and see what Angela has generated
