@@ -85,6 +85,22 @@ export default function HomeTripBuilder() {
           </div>
         </div>
 
+        {/* Modular Flow Test Section */}
+        <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30">
+          <div className="text-center space-y-4">
+            <h3 className="text-xl font-bold text-white">🚀 Modular Flow Test</h3>
+            <p className="text-white/90 text-sm">
+              Test the new modular flow: Profile Save → Meta Attractions → Build List
+            </p>
+            <button 
+              onClick={() => navigate('/build-meta-layer')}
+              className="bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 transition"
+            >
+              Test Modular Flow
+            </button>
+          </div>
+        </div>
+
         {/* Stats or Info */}
         <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30">
           <div className="grid grid-cols-3 gap-4 text-center text-white">

@@ -6,15 +6,17 @@ export default function BuildMetaLayer() {
   const [error, setError] = useState(null);
 
   const testData = {
-    placeSlug: "ParisBudgetSolo",
-    city: "Paris",
-    season: "Spring",
-    whoWith: "Solo",
-    budget: "Budget",
-    priorities: ["Culture", "Food"],
-    vibes: ["Adventure", "Local"],
-    mobility: ["Love walking everywhere"],
-    travelPace: "Relaxed"
+    placeSlug: "BarcelonaBudgetSolo",
+    inputVariables: {
+      city: "Barcelona",
+      season: "Summer",
+      whoWith: "Solo",
+      budget: "Budget",
+      priorities: ["Culture", "Food"],
+      vibes: ["Adventure", "Local"],
+      mobility: ["Love walking everywhere"],
+      travelPace: "Relaxed"
+    }
   };
 
   const handleTest = async () => {
@@ -51,8 +53,8 @@ export default function BuildMetaLayer() {
         },
         body: JSON.stringify({
           placeSlug: testData.placeSlug,
-          city: testData.city,
-          season: testData.season
+          city: testData.inputVariables.city,
+          season: testData.inputVariables.season
         }),
       });
 
