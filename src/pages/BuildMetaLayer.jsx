@@ -65,9 +65,27 @@ export default function BuildMetaLayer() {
       const metaResult = await metaResponse.json();
       console.log('✅ Meta attractions generated:', metaResult);
 
+      // Step 3: Build personalized list (using meta attractions to avoid them)
+      console.log('📋 Step 3: Building personalized list...');
+      const buildResponse = await fetch('https://gofastbackend.onrender.com/tripwell/build-list', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          placeSlug: testData.placeSlug
+        }),
+      });
+
+      if (!buildResponse.ok) {
+        throw new Error(`Build list failed: ${buildResponse.status}`);
+      }
+
+      const buildResult = await buildResponse.json();
+      console.log('✅ Personalized list built:', buildResult);
+
       setResults({
         profile: profileResult,
-        meta: metaResult
+        meta: metaResult,
+        build: buildResult
       });
 
     } catch (error) {
@@ -97,7 +115,7 @@ export default function BuildMetaLayer() {
           disabled={loading}
           className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
         >
-          {loading ? 'Testing...' : 'Test Profile Save + Meta Attractions'}
+          {loading ? 'Testing...' : 'Test Full Modular Flow (Profile → Meta → Build)'}
         </button>
 
         {error && (
