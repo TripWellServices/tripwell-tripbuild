@@ -23,7 +23,7 @@ const CityToMetaTest = () => {
 
       // Step 1: Create city using parseCityService
       console.log('📝 Step 1: Creating city object...');
-      const cityResponse = await fetch('http://localhost:3001/tripwell/parse-city', {
+      const cityResponse = await fetch('https://gofastbackend.onrender.com/tripwell/parse-city', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const CityToMetaTest = () => {
       console.log('🎯 Step 2: Generating meta attractions...');
       const placeSlug = `${city.toLowerCase().replace(/\s+/g, '-')}-${season.toLowerCase()}`;
       
-      const metaCreatorResponse = await fetch('http://localhost:3001/tripwell/meta-creator', {
+      const metaCreatorResponse = await fetch('https://gofastbackend.onrender.com/tripwell/meta-creator', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const CityToMetaTest = () => {
 
       // Step 3: Parse and save meta attractions using metaParseAndSaveRoute
       console.log('💾 Step 3: Parsing and saving meta attractions...');
-      const metaParseSaveResponse = await fetch('http://localhost:3001/tripwell/meta-parse-and-save', {
+      const metaParseSaveResponse = await fetch('https://gofastbackend.onrender.com/tripwell/meta-parse-and-save', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
