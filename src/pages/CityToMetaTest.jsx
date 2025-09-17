@@ -21,25 +21,8 @@ const CityToMetaTest = () => {
       console.log('🚀 Starting City to Meta Test');
       console.log('City:', city, 'Season:', season);
 
-      // Step 1: Create city using parseCityService
-      console.log('📝 Step 1: Creating city object...');
-      const cityResponse = await fetch('https://gofastbackend.onrender.com/tripwell/parse-city', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ city })
-      });
-
-      const cityResult = await cityResponse.json();
-      console.log('City Result:', cityResult);
-
-      if (cityResult.status !== 'success') {
-        throw new Error(`City creation failed: ${cityResult.message}`);
-      }
-
-      // Step 2: Generate meta attractions using metaCreatorRoute
-      console.log('🎯 Step 2: Generating meta attractions...');
+      // Step 1: Generate meta attractions using metaCreatorRoute
+      console.log('🎯 Step 1: Generating meta attractions...');
       const placeSlug = `${city.toLowerCase().replace(/\s+/g, '-')}-${season.toLowerCase()}`;
       
       const metaCreatorResponse = await fetch('https://gofastbackend.onrender.com/tripwell/meta-creator', {
@@ -61,8 +44,8 @@ const CityToMetaTest = () => {
         throw new Error(`Meta creator failed: ${metaCreatorResult.message}`);
       }
 
-      // Step 3: Parse and save meta attractions using metaParseAndSaveRoute
-      console.log('💾 Step 3: Parsing and saving meta attractions...');
+      // Step 2: Parse and save meta attractions using metaParseAndSaveRoute
+      console.log('💾 Step 2: Parsing and saving meta attractions...');
       const metaParseSaveResponse = await fetch('https://gofastbackend.onrender.com/tripwell/meta-parse-and-save', {
         method: 'POST',
         headers: {
@@ -85,7 +68,6 @@ const CityToMetaTest = () => {
 
       // Success!
       setResults({
-        city: cityResult,
         metaCreator: metaCreatorResult,
         metaParseSave: metaParseSaveResult
       });
@@ -162,13 +144,6 @@ const CityToMetaTest = () => {
             <div className="bg-green-50 border border-green-200 rounded-md p-4">
               <h3 className="text-green-800 font-medium">✅ Success!</h3>
               <p className="text-green-700">City to Meta flow completed successfully</p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4">City Creation Result</h3>
-              <pre className="bg-gray-100 p-4 rounded-md overflow-auto text-sm">
-                {JSON.stringify(results.city, null, 2)}
-              </pre>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
