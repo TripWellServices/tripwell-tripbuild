@@ -101,6 +101,22 @@ export default function HomeTripBuilder() {
           </div>
         </div>
 
+        {/* City to Meta Test Section */}
+        <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30">
+          <div className="text-center space-y-4">
+            <h3 className="text-xl font-bold text-white">🏙️ City to Meta Test</h3>
+            <p className="text-white/90 text-sm">
+              Test the separate meta flow: City Parser → Meta Creator → Meta Parse/Save
+            </p>
+            <button 
+              onClick={() => navigate('/city-to-meta-test')}
+              className="bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition"
+            >
+              Test City to Meta
+            </button>
+          </div>
+        </div>
+
         {/* Stats or Info */}
         <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30">
           <div className="grid grid-cols-3 gap-4 text-center text-white">
