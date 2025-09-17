@@ -16,6 +16,12 @@ export default function BuildMetaLayer() {
       vibes: ["Adventure", "Local"],
       mobility: ["Love walking everywhere"],
       travelPace: "Relaxed"
+    },
+    // New persona system data
+    personaData: {
+      primaryPersona: "art",
+      budget: "moderate", 
+      whoWith: "solo"
     }
   };
 
@@ -44,6 +50,27 @@ export default function BuildMetaLayer() {
       const profileResult = await profileResponse.json();
       console.log('✅ Profile saved:', profileResult);
 
+      // Step 1.5: Create trip persona
+      console.log('📋 Step 1.5: Creating trip persona...');
+      const personaResponse = await fetch('https://gofastbackend.onrender.com/tripwell/tripintent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tripId: "test-trip-123",
+          userId: "test-user-123",
+          ...testData.personaData
+        }),
+      });
+
+      if (!personaResponse.ok) {
+        throw new Error(`Persona creation failed: ${personaResponse.status}`);
+      }
+
+      const personaResult = await personaResponse.json();
+      console.log('✅ Persona created:', personaResult);
+
       // Step 2: Generate meta attractions
       console.log('📋 Step 2: Generating meta attractions...');
       const metaResponse = await fetch('https://gofastbackend.onrender.com/tripwell/meta-attractions', {
@@ -65,13 +92,40 @@ export default function BuildMetaLayer() {
       const metaResult = await metaResponse.json();
       console.log('✅ Meta attractions generated:', metaResult);
 
-      // Step 3: Build personalized list (using meta attractions to avoid them)
-      console.log('📋 Step 3: Building personalized list...');
-      const buildResponse = await fetch('https://gofastbackend.onrender.com/tripwell/build-list', {
+      // Step 2.5: Generate sample attractions for persona learning
+      console.log('📋 Step 2.5: Generating sample attractions...');
+      const samplesResponse = await fetch('https://gofastbackend.onrender.com/tripwell/persona-samples', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tripId: "test-trip-123",
+          userId: "test-user-123",
+          city: testData.inputVariables.city,
+          personas: personaResult.personas,
+          budget: testData.personaData.budget,
+          whoWith: testData.personaData.whoWith
+        }),
+      });
+
+      if (!samplesResponse.ok) {
+        throw new Error(`Sample attractions failed: ${samplesResponse.status}`);
+      }
+
+      const samplesResult = await samplesResponse.json();
+      console.log('✅ Sample attractions generated:', samplesResult);
+
+      // Step 3: Build personalized itinerary (using persona weights and meta attractions)
+      console.log('📋 Step 3: Building personalized itinerary...');
+      const buildResponse = await fetch('https://gofastbackend.onrender.com/tripwell/itinerary/build', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          placeSlug: testData.placeSlug
+          tripId: "test-trip-123",
+          userId: "test-user-123",
+          selectedMetas: [], // Would come from meta selection UI
+          selectedSamples: [] // Would come from sample selection UI
         }),
       });
 
@@ -84,7 +138,9 @@ export default function BuildMetaLayer() {
 
       setResults({
         profile: profileResult,
+        persona: personaResult,
         meta: metaResult,
+        samples: samplesResult,
         build: buildResult
       });
 
@@ -115,7 +171,7 @@ export default function BuildMetaLayer() {
           disabled={loading}
           className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
         >
-          {loading ? 'Testing...' : 'Test Full Modular Flow (Profile → Meta → Build)'}
+          {loading ? 'Testing...' : 'Test Full Persona Flow (Profile → Persona → Meta → Samples → Itinerary)'}
         </button>
 
         {error && (
@@ -138,9 +194,30 @@ export default function BuildMetaLayer() {
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-gray-700 mb-4">Persona Creation Result</h3>
+              <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                {JSON.stringify(results.persona, null, 2)}
+              </pre>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
               <h3 className="text-xl font-semibold text-gray-700 mb-4">Meta Attractions Result</h3>
               <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
                 {JSON.stringify(results.meta, null, 2)}
+              </pre>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-gray-700 mb-4">Sample Attractions Result</h3>
+              <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                {JSON.stringify(results.samples, null, 2)}
+              </pre>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-gray-700 mb-4">Final Itinerary Result</h3>
+              <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+                {JSON.stringify(results.build, null, 2)}
               </pre>
             </div>
           </div>
