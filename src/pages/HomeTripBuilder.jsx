@@ -101,18 +101,18 @@ export default function HomeTripBuilder() {
           </div>
         </div>
 
-        {/* City Parser Test Section */}
+        {/* Trip Setup Test Section */}
         <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30">
           <div className="text-center space-y-4">
-            <h3 className="text-xl font-bold text-white">🏙️ City Parser Test</h3>
+            <h3 className="text-xl font-bold text-white">🚀 Trip Setup Test</h3>
             <p className="text-white/90 text-sm">
-              Test just the city parser - save city to MongoDB
+              Test complete flow: User → TripBase → City → Meta Attractions
             </p>
             <button 
-              onClick={() => navigate('/city-parser-test')}
+              onClick={() => navigate('/trip-setup-test')}
               className="bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition"
             >
-              Test City Parser
+              Test Trip Setup
             </button>
           </div>
         </div>

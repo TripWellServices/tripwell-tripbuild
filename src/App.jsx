@@ -7,6 +7,7 @@ import PlaceDetail from './pages/PlaceDetail';
 import GenerateTests from './pages/GenerateTests';
 import BuildMetaLayer from './pages/BuildMetaLayer';
 import CityToMetaTest from './pages/CityToMetaTest';
+import TripSetupTest from './pages/TripSetupTest';
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/generate-tests" element={<GenerateTests />} />
           <Route path="/build-meta-layer" element={<BuildMetaLayer />} />
           <Route path="/city-to-meta-test" element={<CityToMetaTest />} />
+          <Route path="/trip-setup-test" element={<TripSetupTest />} />
         </Routes>
       </div>
     </Router>
